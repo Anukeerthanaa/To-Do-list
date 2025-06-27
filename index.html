@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm Clock</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .clock-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-top: 50px;
+        }
+        #clock {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .alarm-settings {
+            margin-top: 20px;
+        }
+        input[type="time"] {
+            padding: 5px;
+            font-size: 1em;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-group">
+            <input type="text" id="taskName" placeholder="Task Name">
+            <input type="text" id="taskDescription" placeholder="Description">
+            <input type="time" id="taskTime">
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+        <h2>Pending Tasks</h2>
+        <ul id="pendingTasks"></ul>
+        <h2>Completed Tasks</h2>
+        <ul id="completedTasks"></ul>
+    </div>
+    <script src="script.js"></script>
+    <div class="clock-container">
+        <h1>Alarm Clock</h1>
+        <div id="clock">00:00:00</div>
+        
+        <div class="alarm-settings">
+            <input type="time" id="alarmTime">
+            <button onclick="setAlarm()">Set Alarm</button>
+        </div>
+        
+        <ul id="alarmList"></ul>
+    </div>
+    <audio id="alarmSound" src="Kannil Kanavaga Nee Song-Downringtone.com.mp3" preload="auto"></audio>
+    <script>
+        function updateClock() {
+            let now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+            checkAlarms(`${hours}:${minutes}`);
+        }
+        setInterval(updateClock, 1000);
+
+        let alarms = [];
+
+        function setAlarm() {
+            let alarmTime = document.getElementById('alarmTime').value;
+            if (!alarmTime) {
+                alert("Please select a valid time.");
+                return;
+            }
+            alarms.push(alarmTime);
+            displayAlarms();
+        }
+
+        function displayAlarms() {
+            let alarmList = document.getElementById('alarmList');
+            alarmList.innerHTML = "";
+            alarms.forEach((alarm, index) => {
+                let li = document.createElement('li');
+                li.innerHTML = `${alarm} <button class='delete-btn' onclick='deleteAlarm(${index})'>Delete</button>`;
+                alarmList.appendChild(li);
+            });
+        }
+
+        function deleteAlarm(index) {
+            alarms.splice(index, 1);
+            displayAlarms();
+        }
+
+        function checkAlarms(currentTime) {
+            if (alarms.includes(currentTime)) {
+                document.getElementById('alarmSound').play();
+                alert("Alarm ringing!");
+            }
+        }
+    </script>
+    
+</body>
+</html>
+
+    
